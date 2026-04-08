@@ -1,8 +1,61 @@
-Current Release: V6.1.0
+Current Release: V8.0.0
 
-[Migrate from-V5.x.x to V6.x.x](docs/migrate-from-V5-to-V6.md)
+**Migration Guides:**
+- [Migrate from V7.x.x to V8.x.x](docs/migrate-from-V7-to-V8.md)
+- [Migrate from V6.x.x to V7.x.x](docs/migrate-from-V6-to-V7.md)
+- [Migrate from V5.x.x to V6.x.x](docs/migrate-from-V5-to-V6.md)
+- [Migrate from V4.0.3 to V5.2.X](docs/migrate-from-V4-to-V5.md)
 
-This is the codespaces demo of React-Automation-Studio.
+## ⚠️ V8.0.0 Breaking Changes Summary
+
+**If you use the standard RAS containers with the latest Docker, no action is required.**
+
+### Important Requirements
+
+| Item | Requirement | Impact |
+|------|-------------|--------|
+| **Docker Version** | 28.1.1+ | Required - New Docker Compose features |
+| **Docker Compose** | Latest version | Required - Bake feature support |
+| **Python Package Manager** | UV (automatic) | Internal change - transparent to users |
+| **Base OS** | Ubuntu 24.04 LTS | Backend containers only |
+
+### Key Changes
+
+1. **Python Package Management → UV**
+   - Unified local cache shared across all containers
+   - Faster builds and consistent dependencies
+   - **Action needed:** Only if you have custom Python backend containers
+
+2. **EPICS Base Image Foundation**
+   - `epicsbase` is now the foundational layer for all backend containers
+   - Includes: EPICS, Python, and shared dependencies
+   - **Action needed:** Update custom compose files to reference epicsbase
+
+3. **Custom Docker Compose Configurations**
+   - If you maintain custom `docker-compose.yml` files, add to backend services:
+   ```yaml
+   build:
+     additional_contexts:
+       epicsbase: "service:epicsbase"
+   depends_on:
+     - epicsbase
+   ```
+
+4. **Optional Performance Boost**
+   - Enable Docker Compose Bake for 2-3x faster multi-container builds
+   - Edit `$HOME/.docker/config.json`:
+   ```json
+   {
+     "plugins": {
+       "compose": {
+         "build": "bake"
+       }
+     }
+   }
+   ```
+   - Reference: https://docs.docker.com/compose/how-tos/dependent-images/
+
+**For detailed migration steps, see [Migrate from V7.x.x to V8.x.x](docs/migrate-from-V7-to-V8.md)**
 
 You can use it to evaluate the latest version without checking it out locally.
 
@@ -107,19 +160,43 @@ or: https://doi.org/10.18429/JACoW-ICALEPCS2023-FR2BCO01
 
 # FAQ
 
-### 1.   Which operating systems are supported?
+### 1. Which operating systems are supported?
 
   The client is web based and can be accessed from any modern browser on any modern OS..
 
   We currently only build and test on Ubuntu and Chrome. We unfortunately don't have the time to test on the other systems. In theory all up to date Linux systems should be supported.
 
-### 2.  Are other systems such as  Windows or Mac OS supported?
+### 2.  Are other systems such as Windows or Mac OS supported?
 
   The docker containers for RAS run in network  mode host. This is done to enable EPICS to communicate seamlessly with any IOC's on the same subnet as the host. Other OSes such as Windows may not support the host mode and will run in the bridged mode. This may break the communication between the micro services. It is therefore recommended to run the RAS containers on a Linux VM that is minimally running Ubuntu Server. Please ensure the the VM network interface is assigned an IP on the same subnet as your EPICS network in order for communication with the IOC's to occur seamlessly.
 
 
 
 # Changelog
+
+ V8.0.0 Wednesday 18 February 2026
+  <br />
+  Major Updates:
+  <ul>     
+    <li>Updated to the latest Node LTS 24.13.1 </li>
+    <li>Switched to UV Python package management</li>
+    <li>Updated to Python 3.13.11</li>
+    <li>Updated to PyEpics 3.5.9</li>
+    <li>Updated to MongoDb 8.2.3</li>
+    <li>Updated docker compose organisation</li>
+    <li>Package updates to frontend modules</li>
+    <li>Package updates to backend modules</li>
+  </ul>
+
+ V7.0.0 Tuesday 16 September 2025
+  <br />
+  Major Updates:
+  <ul>
+    <li>Updated to Updated to MUI V7 </li>
+    <li>Updated to the latest Node LTS 22.19.0 </li>
+    <li>Package updates to frontend modules</li>
+    <li>Removed legacy MUI styling</li>
+  </ul>
 
 V6.1.0 Monday 17 February 2025
   <br />

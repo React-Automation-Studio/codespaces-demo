@@ -1,5 +1,7 @@
 FROM python:3.8.7
-
+RUN echo "deb http://archive.debian.org/debian buster main contrib non-free\n\
+    deb http://archive.debian.org/debian-security buster/updates main contrib non-free \n\
+" > /etc/apt/sources.list
 # Create signal-cli user
 ENV HOME /srv/signal
 
@@ -38,5 +40,4 @@ COPY ./signalcli/signal_cli_rest_api/ signal_cli_rest_api/
 # Prepare mount point for signal-cli 
 RUN mkdir -p $HOME/.local/share/signal-cli
 
-
-CMD python ./signal_cli_rest_api/main.py
+CMD ["python", "./signal_cli_rest_api/main.py"]
