@@ -1,7 +1,9 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
-  // "image":"ubuntu:22.04",
+  
+  "image": "://microsoft.com",
+
   //"dockerComposeFile": "../docker-compose-dev-sandboxio.yml",
   "dockerComposeFile": "../docker-compose-sandboxio.yml",
   "service": "terminal",
